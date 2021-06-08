@@ -5,7 +5,9 @@ services:
   # If using CockroachDB:
   cockroach:
     # In production, replace 'latest' with tag from https://hub.docker.com/r/cockroachdb/cockroach/tags
-    image: cockroachdb/cockroach:latest
+    #                                               https://hub.docker.com/r/rook/cockroachdb/ 
+    #image: cockroachdb/cockroach:latest
+    image: rook/cockroachdb:v1.5.12
     command: start-single-node --http-port 26256 --insecure
     restart: unless-stopped
     volumes:
@@ -16,7 +18,8 @@ services:
 
   redis:
     # In production, replace 'latest' with tag from https://hub.docker.com/_/redis?tab=tags
-    image: redis:latest
+    #image: redis:latest
+    image: arm64v8/redis:latest
     command: redis-server --appendonly yes
     restart: unless-stopped
     volumes:
@@ -26,14 +29,14 @@ services:
 
   ttn-stack:
     # In production, replace 'latest' with tag from https://hub.docker.com/r/thethingsnetwork/lorawan-stack/tags
-    image: thethingsnetwork/lorawan-stack:latest
+    image: thethingsnetwork/lorawan-stack:3.13.1
     entrypoint: ttn-lw-stack -c /config/ttn-lw-stack-docker.yml
     command: start
     restart: unless-stopped
-    depends_on:
-      - redis
+    #depends_on:
+    #  - redis
       # If using CockroachDB:
-      - cockroach
+    #  - cockroach
       # If using PostgreSQL:
       # - postgres
     volumes:
